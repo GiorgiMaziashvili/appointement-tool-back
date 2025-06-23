@@ -4,7 +4,7 @@
   "description": "Medical clinic management system backend with TypeORM and Supabase",
   "main": "dist/app.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node start.js",
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "build": "tsc",
     "seed": "ts-node src/database/seeders/seed.ts",

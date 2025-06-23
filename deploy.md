@@ -47,33 +47,32 @@ DB_SSL=true
 FRONTEND_URL=*
 ```
 
-### 3. Fix Common Build Issues
+### 3. ✅ Path Issues FIXED!
 
-If you get the `Cannot find module '/opt/render/project/src/dist/app.js'` error:
+The `Cannot find module '/opt/render/project/src/dist/app.js'` error has been **automatically fixed** with:
 
-**Option A: Add package.json engine specification**
-Add this to your `package.json`:
+**✅ Smart Start Script (`start.js`)**
 
-```json
-{
-  "engines": {
-    "node": ">=18.0.0"
-  }
-}
+- Automatically detects correct file paths
+- Shows debug information during startup
+- Handles different directory structures on Render
+
+**✅ Node.js Configuration**
+
+- Engine specification in `package.json`
+- `.nvmrc` file for version consistency
+- Optimized build command: `npm ci && npm run build`
+
+**What you'll see in Render logs:**
+
 ```
-
-**Option B: Create .nvmrc file**
-
-```bash
-echo "20" > .nvmrc
+Current working directory: /opt/render/project
+Looking for app.js in these locations:
+1. /opt/render/project/dist/app.js - EXISTS
+Starting app from: /opt/render/project/dist/app.js
+Database connection established
+🚀 Server is running on http://localhost:10000
 ```
-
-**Option C: Check Build Logs**
-
-- Go to your service dashboard on Render
-- Click on "Logs" tab
-- Look for TypeScript compilation errors
-- Ensure `dist/` folder is created during build
 
 ### 4. After Deployment
 
