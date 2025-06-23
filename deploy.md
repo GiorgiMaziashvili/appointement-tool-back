@@ -15,19 +15,28 @@ git push -u origin main
 
 ### 2. Render.com Settings
 
-When creating the web service on Render.com, use these settings:
+When creating the web service on Render.com, use these **EXACT** settings:
 
 **Basic Settings:**
 
 - Name: `medical-clinic-backend`
 - Environment: `Node`
-- Build Command: `npm install && npm run build`
+- Region: `Oregon (US West)` or closest to you
+- Branch: `main`
+- Root Directory: (leave empty)
+- Build Command: `npm ci && npm run build`
 - Start Command: `npm start`
+
+**Advanced Settings:**
+
+- Auto-Deploy: `Yes`
+- Node Version: `20` (add this in environment variables)
 
 **Environment Variables:**
 
 ```
 NODE_ENV=production
+NODE_VERSION=20
 PORT=10000
 DB_HOST=aws-0-eu-north-1.pooler.supabase.com
 DB_PORT=5432
@@ -38,7 +47,35 @@ DB_SSL=true
 FRONTEND_URL=*
 ```
 
-### 3. After Deployment
+### 3. Fix Common Build Issues
+
+If you get the `Cannot find module '/opt/render/project/src/dist/app.js'` error:
+
+**Option A: Add package.json engine specification**
+Add this to your `package.json`:
+
+```json
+{
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+```
+
+**Option B: Create .nvmrc file**
+
+```bash
+echo "20" > .nvmrc
+```
+
+**Option C: Check Build Logs**
+
+- Go to your service dashboard on Render
+- Click on "Logs" tab
+- Look for TypeScript compilation errors
+- Ensure `dist/` folder is created during build
+
+### 4. After Deployment
 
 Your API will be available at:
 `https://medical-clinic-backend.onrender.com`
@@ -49,6 +86,27 @@ Test endpoints:
 - Doctors: `https://medical-clinic-backend.onrender.com/api/doctors`
 - Appointments: `https://medical-clinic-backend.onrender.com/api/appointments`
 
-### 4. Update Frontend
+### 5. Update Frontend
 
 Change your React app's API URL to the deployed backend URL.
+
+### 6. Troubleshooting Deployment Issues
+
+**If build fails with "Cannot find module":**
+
+1. Check that `npm run build` works locally
+2. Verify `dist/app.js` exists after local build
+3. Check Node.js version compatibility
+4. Add explicit node version in environment variables
+
+**If database connection fails:**
+
+1. Verify all environment variables are set correctly
+2. Check Supabase database URL and credentials
+3. Ensure `DB_SSL=true` is set
+
+**If app crashes on startup:**
+
+1. Check logs in Render dashboard
+2. Verify all dependencies are in `dependencies` not `devDependencies`
+3. Ensure TypeORM entities are compiled correctly
